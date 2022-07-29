@@ -8,30 +8,29 @@ public class GameScript : MonoBehaviour
 {
     //=========== GUI Elements 
     public TextMeshProUGUI score;   //Tells us the score of the player 
-    public TextMeshProUGUI lives;   //Tells us how many lives the player has 
+    public TextMeshProUGUI live;   //Tells us how many lives the player has 
 
-    private int scoreCounter = 0;   //Keeps Track of the score 
-    private int livesCounter = 3;   //Keeps Track of the lives left 
+    private int scoreCount = 0;   //Keeps Track of the score 
+    private int liveCount = 3;   //Keeps Track of the lives left 
 
     //========== Ball Controls 
     public GameObject ball;
     public Transform spawnPoint;
 
     //========== Spike Controls 
-    public List<Transform> points;  //Holds all of the points that the spike goes through 
+    public List<Transform> point;  //Holds all of the points that the spike goes through 
     public float speed = 5;         //The Speed of the spikes movement 
     private int index = 0;          //Which index that spike is moving towards 
 
     //========== Level Controls 
     public string levelName;
 
-    //===============================================================
     //Base Functions
-    //===============================================================
 
     //Preset the texts 
     private void Start()
     {
+        score.text = "0";
         //Present the Text to values of 0
     }
 
@@ -39,15 +38,15 @@ public class GameScript : MonoBehaviour
     void Update()
     {
         //Tells it to move from currently standing in point, to given point at the given speed 
-        transform.position = Vector3.MoveTowards(transform.position, points[index].position,
+        transform.position = Vector3.MoveTowards(transform.position, point[index].position,
                     speed * Time.deltaTime);
         //Rotate to the direction 
-        transform.rotation = points[index].rotation;
+        transform.rotation = point[index].rotation;
         //Checks if the enemy reached their goal 
-        if (transform.position == points[index].position)
+        if (transform.position == point[index].position)
         {
             //If it's the last spot reset 
-            if (index == points.Count - 1)
+            if (index == point.Count - 1)
             {
                 index = 0;
             }
@@ -58,38 +57,41 @@ public class GameScript : MonoBehaviour
             }
         }
     }
-
-    //===============================================================
     //Extra Functions 
-    //===============================================================
-
+   
     //Lowers the counter of lives, and updates the text 
     public void SpikeUpdate()
     {
-        livesCounter--;
+        liveCount--;
+        live.text = "Life:" + liveCount;
         //Update the text 
-        if (livesCounter == 0)
+        if (liveCount == 0)
         {
-            BackToMainMenu();
+            ReturnToMain();
         }
     }
 
+
     //Increase the score and updates the text 
-    public void GoalUpdate()
+    public void GoalKeeper()
     {
-        scoreCounter++;
-        //Update the Text 
+        scoreCount++;
+
+        score.text = "Score: " + scoreCount;
     }
 
     //Creates a new ball
     public void SpawnBall()
     {
+        var pos = new Vector3(0, 0, 0);
+        var spawn = Instantiate(ball, pos, Quaternion.identity);
         //Create Ball
     }
 
     //Sends the game back to the main menu scene 
-    private void BackToMainMenu()
+    private void ReturnToMain()
     {
+        SceneManager.LoadScene(levelName);
         //Send back to the main menu
     }
 }

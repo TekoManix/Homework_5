@@ -26,7 +26,7 @@ public class BallScript : MonoBehaviour
         //Checks if the ball has collided with the goal 
         else if (other.CompareTag("Goal"))
         {
-            gameScript.GoalUpdate();
+            gameScript.GoalKeeper();
             Destroy(gameObject);
         }
     }
